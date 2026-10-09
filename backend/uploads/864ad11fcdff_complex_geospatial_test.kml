@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2"
+     xmlns:gx="http://www.google.com/kml/ext/2.2">
+<Document>
+  <name>Complex Geospatial Test Dataset</name>
+  <description><![CDATA[
+    Synthetic test dataset for validating KML import, geometry parsing, length/area measurement,
+    folders, styles, ExtendedData, holes, MultiGeometry, altitude, and gx:Track support.
+    Coordinates are illustrative test locations, not authoritative survey boundaries.
+  ]]></description>
+
+  <Style id="boundaryStyle">
+    <LineStyle><color>ff00ffff</color><width>3</width></LineStyle>
+    <PolyStyle><color>5500ff00</color><fill>1</fill><outline>1</outline></PolyStyle>
+  </Style>
+  <Style id="restrictedStyle">
+    <LineStyle><color>ff0000ff</color><width>2</width></LineStyle>
+    <PolyStyle><color>660000ff</color><fill>1</fill><outline>1</outline></PolyStyle>
+  </Style>
+  <Style id="routeStyle">
+    <LineStyle><color>ffff8800</color><width>4</width></LineStyle>
+  </Style>
+  <Style id="siteStyle">
+    <IconStyle><color>ff00a5ff</color><scale>1.1</scale>
+      <Icon><href>https://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href></Icon>
+    </IconStyle>
+    <LabelStyle><scale>0.9</scale></LabelStyle>
+  </Style>
+
+  <Folder>
+    <name>01 - Control Points</name>
+    <Placemark>
+      <name>Control Point Alpha</name>
+      <styleUrl>#siteStyle</styleUrl>
+      <description><![CDATA[Ground control point for point parsing and coordinate display.]]></description>
+      <ExtendedData>
+        <Data name="point_id"><value>GCP-001</value></Data>
+        <Data name="quality"><value>high</value></Data>
+        <Data name="test_group"><value>control_points</value></Data>
+      </ExtendedData>
+      <Point><altitudeMode>absolute</altitudeMode><coordinates>76.9558,11.0168,412.5</coordinates></Point>
+    </Placemark>
+    <Placemark>
+      <name>Control Point Bravo</name>
+      <styleUrl>#siteStyle</styleUrl>
+      <ExtendedData>
+        <Data name="point_id"><value>GCP-002</value></Data>
+        <Data name="quality"><value>medium</value></Data>
+      </ExtendedData>
+      <Point><coordinates>76.9684,11.0242,0</coordinates></Point>
+    </Placemark>
+    <Placemark>
+      <name>Control Point Charlie</name>
+      <styleUrl>#siteStyle</styleUrl>
+      <Point><coordinates>76.9420,11.0095,0</coordinates></Point>
+    </Placemark>
+  </Folder>
+
+  <Folder>
+    <name>02 - Survey Parcels</name>
+    <Placemark>
+      <name>Parcel A - Simple Polygon</name>
+      <styleUrl>#boundaryStyle</styleUrl>
+      <description><![CDATA[Closed polygon for area and perimeter measurement.]]></description>
+      <ExtendedData>
+        <Data name="parcel_code"><value>PAR-A-100</value></Data>
+        <Data name="land_use"><value>agricultural</value></Data>
+        <Data name="expected_geometry"><value>Polygon</value></Data>
+      </ExtendedData>
+      <Polygon>
+        <tessellate>1</tessellate>
+        <outerBoundaryIs><LinearRing><coordinates>
+          76.9500,11.0150,0
+          76.9570,11.0150,0
+          76.9580,11.0200,0
+          76.9530,11.0230,0
+          76.9490,11.0190,0
+          76.9500,11.0150,0
+        </coordinates></LinearRing></outerBoundaryIs>
+      </Polygon>
+    </Placemark>
+
+    <Placemark>
+      <name>Parcel B - Polygon With Inner Hole</name>
+      <styleUrl>#boundaryStyle</styleUrl>
+      <description><![CDATA[Polygon with an inner ring. Area calculation should subtract the hole.]]></description>
+      <ExtendedData>
+        <Data name="parcel_code"><value>PAR-B-200</value></Data>
+        <Data name="has_inner_ring"><value>true</value></Data>
+      </ExtendedData>
+      <Polygon>
+        <tessellate>1</tessellate>
+        <outerBoundaryIs><LinearRing><coordinates>
+          76.9600,11.0120,0
+          76.9700,11.0120,0
+          76.9710,11.0200,0
+          76.9650,11.0260,0
+          76.9590,11.0210,0
+          76.9600,11.0120,0
+        </coordinates></LinearRing></outerBoundaryIs>
+        <innerBoundaryIs><LinearRing><coordinates>
+          76.9630,11.0160,0
+          76.9660,11.0160,0
+          76.9660,11.0190,0
+          76.9630,11.0190,0
+          76.9630,11.0160,0
+        </coordinates></LinearRing></innerBoundaryIs>
+      </Polygon>
+    </Placemark>
+
+    <Placemark>
+      <name>Parcel C - MultiGeometry</name>
+      <styleUrl>#boundaryStyle</styleUrl>
+      <description><![CDATA[Contains two separate polygons in one placemark plus a point.]]></description>
+      <ExtendedData>
+        <Data name="parcel_code"><value>PAR-C-300</value></Data>
+        <Data name="geometry_complexity"><value>MultiGeometry</value></Data>
+      </ExtendedData>
+      <MultiGeometry>
+        <Polygon><outerBoundaryIs><LinearRing><coordinates>
+          76.9350,11.0120,0 76.9400,11.0120,0 76.9410,11.0160,0
+          76.9360,11.0180,0 76.9340,11.0150,0 76.9350,11.0120,0
+        </coordinates></LinearRing></outerBoundaryIs></Polygon>
+        <Polygon><outerBoundaryIs><LinearRing><coordinates>
+          76.9360,11.0210,0 76.9400,11.0210,0 76.9410,11.0240,0
+          76.9370,11.0260,0 76.9350,11.0240,0 76.9360,11.0210,0
+        </coordinates></LinearRing></outerBoundaryIs></Polygon>
+        <Point><coordinates>76.9380,11.0190,0</coordinates></Point>
+      </MultiGeometry>
+    </Placemark>
+  </Folder>
+
+  <Folder>
+    <name>03 - Routes and Linear Features</name>
+    <Placemark>
+      <name>Route 01 - Road Centerline</name>
+      <styleUrl>#routeStyle</styleUrl>
+      <description><![CDATA[Multi-vertex route with altitude values. Test total line length.]]></description>
+      <ExtendedData>
+        <Data name="route_id"><value>RT-001</value></Data>
+        <Data name="surface"><value>paved</value></Data>
+      </ExtendedData>
+      <LineString>
+        <tessellate>1</tessellate>
+        <altitudeMode>clampToGround</altitudeMode>
+        <coordinates>
+          76.9300,11.0060,0
+          76.9360,11.0090,0
+          76.9410,11.0130,0
+          76.9470,11.0145,0
+          76.9530,11.0180,0
+          76.9610,11.0220,0
+          76.9700,11.0250,0
+        </coordinates>
+      </LineString>
+    </Placemark>
+
+    <Placemark>
+      <name>Route 02 - MultiGeometry Line Network</name>
+      <styleUrl>#routeStyle</styleUrl>
+      <MultiGeometry>
+        <LineString><coordinates>
+          76.9320,11.0250,0 76.9380,11.0220,0 76.9440,11.0200,0
+        </coordinates></LineString>
+        <LineString><coordinates>
+          76.9440,11.0200,0 76.9490,11.0250,0 76.9560,11.0270,0
+        </coordinates></LineString>
+      </MultiGeometry>
+    </Placemark>
+  </Folder>
+
+  <Folder>
+    <name>04 - Restricted Zones</name>
+    <Placemark>
+      <name>Restricted Zone R1</name>
+      <styleUrl>#restrictedStyle</styleUrl>
+      <ExtendedData>
+        <Data name="zone_id"><value>RZ-01</value></Data>
+        <Data name="severity"><value>high</value></Data>
+        <Data name="active"><value>true</value></Data>
+      </ExtendedData>
+      <Polygon>
+        <outerBoundaryIs><LinearRing><coordinates>
+          76.9460,11.0260,0 76.9510,11.0260,0 76.9520,11.0300,0
+          76.9470,11.0310,0 76.9460,11.0260,0
+        </coordinates></LinearRing></outerBoundaryIs>
+      </Polygon>
+    </Placemark>
+  </Folder>
+
+  <Folder>
+    <name>05 - Time and Altitude Test</name>
+    <Placemark>
+      <name>Timed Sensor Track</name>
+      <description><![CDATA[Google extension gx:Track with timestamps and 3D coordinates.]]></description>
+      <ExtendedData>
+        <Data name="sensor_id"><value>SENSOR-TRACK-07</value></Data>
+        <Data name="test_type"><value>gx:Track</value></Data>
+      </ExtendedData>
+      <LineStyle><color>ffcc00cc</color><width>3</width></LineStyle>
+      <gx:Track>
+        <altitudeMode>absolute</altitudeMode>
+        <when>2026-10-08T09:00:00Z</when>
+        <when>2026-10-08T09:05:00Z</when>
+        <when>2026-10-08T09:10:00Z</when>
+        <when>2026-10-08T09:15:00Z</when>
+        <gx:coord>76.9500 11.0100 410</gx:coord>
+        <gx:coord>76.9520 11.0120 418</gx:coord>
+        <gx:coord>76.9550 11.0140 425</gx:coord>
+        <gx:coord>76.9580 11.0170 421</gx:coord>
+      </gx:Track>
+    </Placemark>
+  </Folder>
+
+  <Folder>
+    <name>06 - Edge Cases</name>
+    <Placemark>
+      <name>Very Small Polygon</name>
+      <description><![CDATA[Small polygon to test precision and rounding.]]></description>
+      <Polygon><outerBoundaryIs><LinearRing><coordinates>
+        76.95500,11.01600,0 76.95510,11.01600,0 76.95510,11.01610,0
+        76.95500,11.01610,0 76.95500,11.01600,0
+      </coordinates></LinearRing></outerBoundaryIs></Polygon>
+    </Placemark>
+    <Placemark>
+      <name>Dateline-Safe Test Point</name>
+      <description><![CDATA[Ordinary point with explicit zero altitude.]]></description>
+      <Point><coordinates>76.9600,11.0180,0</coordinates></Point>
+    </Placemark>
+  </Folder>
+</Document>
+</kml>
